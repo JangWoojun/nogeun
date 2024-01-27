@@ -23,6 +23,7 @@
             android:layout_marginStart="12dp"/>
 
         <TextView
+            android:fontFamily="@font/default_font"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="뒤로가기"
@@ -54,6 +55,7 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
+                android:fontFamily="@font/default_font"
                 android:id="@+id/tv_detail_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,6 +71,7 @@
                 android:layout_marginTop="16dp">
 
                 <TextView
+                    android:fontFamily="@font/default_font"
                     android:id="@+id/tv_detail_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -77,6 +80,7 @@
                     android:textColor="@color/gray400"/>
 
                 <TextView
+                    android:fontFamily="@font/default_font"
                     android:id="@+id/tv_detail_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -99,6 +103,7 @@
                     android:layout_gravity="center_vertical"/>
 
                 <TextView
+                    android:fontFamily="@font/default_font"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="좋아요"
@@ -109,6 +114,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
+                    android:fontFamily="@font/default_font"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="200개"
@@ -129,6 +135,7 @@
                 android:background="@drawable/like_btn_back"/>
 
             <TextView
+                android:fontFamily="@font/default_font"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="터치해서 좋아요 누르기"
@@ -144,6 +151,8 @@
                 android:layout_marginTop="36dp">
 
                 <EditText
+                    android:fontFamily="@font/default_font"
+
                     android:id="@+id/et_detail_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -161,6 +170,8 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
+                    android:fontFamily="@font/default_font"
+
                     android:id="@+id/tv_detail_send"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -43,6 +43,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    android:fontFamily="@font/default_font"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -80,6 +81,7 @@
                     android:layout_height="match_parent">
 
                     <EditText
+                        android:fontFamily="@font/default_font"
                         android:layout_marginEnd="72dp"
                         android:maxLines="1"
                         android:background="@null"
@@ -144,6 +146,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:fontFamily="@font/default_font"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -184,6 +187,7 @@
                 android:src="@drawable/add" />
 
             <TextView
+                android:fontFamily="@font/default_font"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="사진 올리기"
