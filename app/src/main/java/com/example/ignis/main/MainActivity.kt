@@ -2,6 +2,7 @@ package com.example.ignis.main
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.location.Location
@@ -17,6 +18,9 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.ignis.R
 import com.example.ignis.databinding.ActivityMainBinding
+import com.example.ignis.network.AllApi
+import com.example.ignis.network.RetrofitClient
+import com.example.ignis.profile.ProfileActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -27,12 +31,19 @@ import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.MapView
+import com.kakao.vectormap.RoadViewRequest.Marker
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
+import com.kakao.vectormap.shape.MapPoints
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +52,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mLocationRequest: LocationRequest
     private var kakaoMap: KakaoMap? = null
     private var myLocation: Location? = null
+    private val retrofit: Retrofit = RetrofitClient.getInstance()
+    private val allApi: AllApi = retrofit.create(AllApi::class.java)
+
     companion object {
         const val REQUEST_PERMISSION_LOCATION = 10
     }
@@ -57,7 +71,39 @@ class MainActivity : AppCompatActivity() {
                     .into(myImage)
             }
 
+            myImage.setOnClickListener {
+                val intent = Intent(this@MainActivity, ProfileActivity::class.java)
+                startActivity(intent)
+            }
 
+
+            val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
+            val token = sharedPreferences.getString("access_token", "")
+            if(token != null && myLocation != null) {
+                allApi.km(
+                    authorization = token,
+                    x = myLocation!!.latitude,
+                    y = myLocation!!.longitude
+                ).enqueue(object : Callback<List<KmResponse>> {
+                    override fun onResponse(
+                        call: Call<List<KmResponse>>,
+                        response: Response<List<KmResponse>>
+                    ) {
+                        when(response.code()) {
+                            200 -> {
+                                for(data in response.body()!!) {
+
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<List<KmResponse>>, t: Throwable) {
+                        Toast.makeText(baseContext,"서버 에러",Toast.LENGTH_SHORT).show()
+                    }
+
+                })
+            }
 
             KeyboardVisibilityEvent.setEventListener(
                 this@MainActivity

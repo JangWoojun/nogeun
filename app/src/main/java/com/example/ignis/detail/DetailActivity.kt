@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -32,7 +33,8 @@ class DetailActivity : AppCompatActivity() {
 
         if(id!= null) {
             val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
-            val token = sharedPreferences.getString("key", "")
+            val token = sharedPreferences.getString("access_token", "")
+            Log.d("TEST","t : $token")
             allApi.detailedRead("Bearer $token", feedId = id).enqueue(object : Callback<ReadResponse> {
                 override fun onResponse(
                     call: Call<ReadResponse>,
