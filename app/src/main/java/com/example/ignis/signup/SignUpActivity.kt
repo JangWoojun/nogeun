@@ -48,11 +48,11 @@ class SignUpActivity : AppCompatActivity(), NameFragment.NameFragmentListener {
 
     fun onButtonAgeClicked(data: SignupRequest) {
         val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
-        val token = sharedPreferences.getString("key", "")
+        val token = sharedPreferences.getString("access_token", "")
         val retrofitAPI = RetrofitClient.getInstance().create(AllApi::class.java)
         val call: Call<Void> = retrofitAPI.signup("Bearer $token", SignupRequest(data.age, data.user_name))
 
-        Log.d("확인", data.toString())
+        Log.d("확인", token.toString())
 
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

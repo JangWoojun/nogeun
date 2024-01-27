@@ -73,17 +73,15 @@ class LoginActivity : AppCompatActivity() {
                                         )
                                     )
 
-                                    val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
-                                    val editor = sharedPreferences.edit()
-
-                                    editor.putString("key", token.accessToken)
-                                    editor.apply()
-
                                     call.enqueue(object : Callback<LoginResponse> {
 
                                         override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                                             if (response.isSuccessful) {
                                                 Log.d("확인", "1")
+                                                val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
+                                                val editor = sharedPreferences.edit()
+                                                editor.putString("access_token", response.body()!!.access_token)
+                                                editor.apply()
                                                 if (response.body()?.is_signed_up == true) {
                                                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                                 } else {
