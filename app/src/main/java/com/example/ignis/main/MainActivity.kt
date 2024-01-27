@@ -1,4 +1,4 @@
-package com.example.ignis
+package com.example.ignis.main
 
 import android.Manifest
 import android.content.Context
@@ -9,17 +9,14 @@ import android.os.Bundle
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
+import com.example.ignis.R
 import com.example.ignis.databinding.ActivityMainBinding
-import com.example.ignis.login.LoginActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -86,10 +83,14 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
                     if (inputText.text.isNotEmpty()) {
-                        val newBackgroundColor = ContextCompat.getColor(this@MainActivity, R.color.primary)
+                        val newBackgroundColor = ContextCompat.getColor(this@MainActivity,
+                            R.color.primary
+                        )
                         searchButton.backgroundTintList = ColorStateList.valueOf(newBackgroundColor)
                     } else {
-                        val newBackgroundColor = ContextCompat.getColor(this@MainActivity, R.color.gray500)
+                        val newBackgroundColor = ContextCompat.getColor(this@MainActivity,
+                            R.color.gray500
+                        )
                         searchButton.backgroundTintList = ColorStateList.valueOf(newBackgroundColor)
                     }
                 }
