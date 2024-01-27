@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
 
                 <data android:host="oauth"
-                    android:scheme="c8173cd37ae24858bdc1a57832061386" />
+                    android:scheme="kakao c8173cd37ae24858bdc1a57832061386" />
             </intent-filter>
 
         </activity>
