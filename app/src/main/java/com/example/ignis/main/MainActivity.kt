@@ -75,6 +75,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            photoUploadButton.setOnClickListener {
+                val bottomSheet = BottomSheet(this@MainActivity)
+                bottomSheet.show(supportFragmentManager, bottomSheet.tag)
+            }
+
 
             inputText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
