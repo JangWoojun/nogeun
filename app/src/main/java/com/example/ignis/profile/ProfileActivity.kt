@@ -26,7 +26,7 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.ivProfileBack.setOnClickListener { finish() }
         val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
-        val token = sharedPreferences.getString("key", "")
+        val token = sharedPreferences.getString("access_token", "")
         allApi.userInfo(authorization = "Bearer $token")
             .enqueue(object : Callback<UserInfoResponse> {
                 override fun onResponse(

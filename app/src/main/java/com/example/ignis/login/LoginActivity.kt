@@ -82,6 +82,7 @@ class LoginActivity : AppCompatActivity() {
                                                 val editor = sharedPreferences.edit()
                                                 editor.putString("access_token", response.body()!!.access_token)
                                                 editor.apply()
+                                                Log.d("TEST","token: ${response.body()!!.access_token}")
                                                 if (response.body()?.is_signed_up == true) {
                                                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                                 } else {
