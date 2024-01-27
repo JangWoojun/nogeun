@@ -58,14 +58,8 @@ interface AllApi {
         @Query("title") title: String
     ): Call<SearchResponse>
 
-    @POST("/feed/add/count/{feedId}") // 좋아요
+    @POST("/feed/count/{feedId}") // 좋아요
     fun addLike(
-        @Header("Authorization") authorization: String,
-        @Query("feedId") feedId: Long
-    ): Call<LikeResponse>
-
-    @POST("/feed/delete/count/{feedId}") // 좋아요 취소
-    fun deleteLike(
         @Header("Authorization") authorization: String,
         @Query("feedId") feedId: Long
     ): Call<LikeResponse>
@@ -74,7 +68,7 @@ interface AllApi {
     fun comment(
         @Header("Authorization") authorization: String,
         @Query("feedId") feedId: Long
-    ): Call<String>
+    ): Call<Void>
 
     @GET("/feed/all?x=0&y=0") // 1km 이내 게시물 조회
     fun km(
