@@ -9,6 +9,7 @@ import com.example.ignis.main.SearchResponse
 import com.example.ignis.signup.SignupRequest
 import com.example.ignis.userInfo.UserInfoResponse
 import com.example.ignis.main.WriteResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -37,11 +38,12 @@ interface AllApi {
         @Header("Authorization") authorization: String,
         ): Call<UserInfoResponse>
 
+    @Multipart
     @POST("/feed") // 게시물 생성
     fun createdFeed(
         @Header("Authorization") authorization: String,
         @Part("title") title: String,
-        @Part("description") description: String,
+        @Part file: MultipartBody.Part,
         @Part("request") request: WriteResponse
     ): Call<Void>
 

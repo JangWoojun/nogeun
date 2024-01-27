@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -80,11 +82,11 @@ class BottomSheet(context: Context) : BottomSheetDialogFragment() {
 
     private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val takenImage = result.data?.extras?.get("data")
+            val takenImage = result.data?.extras?.get("data") as Bitmap
             Log.d("확인", "Image URI: $takenImage")
 
             val nextActivityIntent = Intent(context, WriteActivity::class.java)
-            nextActivityIntent.putExtra("imageUri", takenImage.toString())
+            nextActivityIntent.putExtra("imageUri2", takenImage)
             startActivity(nextActivityIntent)
         }
     }
