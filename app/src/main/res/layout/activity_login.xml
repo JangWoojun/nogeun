@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:gravity="center"
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,10 +7,48 @@
     android:layout_height="match_parent"
     tools:context=".login.LoginActivity">
 
-    <Button
-        android:id="@+id/login"
-        android:text="로그인"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="노인 근처의 커뮤니티"
+            android:textSize="22sp"
+            android:textColor="@color/gray900"
+            android:layout_gravity="center_horizontal"/>
+
+        <ImageView
+            android:layout_width="230dp"
+            android:layout_height="85dp"
+            android:src="@drawable/logo"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="카카오로 시작하기"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="23dp"
+        android:background="@drawable/login_btn"
+        android:drawableLeft="@drawable/kakao_img"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textSize="24sp"
+        android:textColor="@color/gray900"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
