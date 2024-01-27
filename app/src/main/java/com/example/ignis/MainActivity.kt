@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             UserApiClient.instance.me { user, _ ->
                 Glide
                     .with(baseContext)
-                    .load(user!!.kakaoAccount?.profile?.thumbnailImageUrl)
+                    .load(user?.kakaoAccount?.profile?.thumbnailImageUrl)
                     .into(myImage)
             }
 
