@@ -1,5 +1,6 @@
 package com.example.ignis
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
+
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
             UserApiClient.instance.me { user, error ->
                 if (error != null) {
                     Log.e(TAG, "사용자 정보 요청 실패", error)
