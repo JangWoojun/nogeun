@@ -38,6 +38,7 @@
         android:layout_marginTop="12dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_profile"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="12dp"/>
@@ -97,6 +98,7 @@
         android:layout_marginTop="24dp">
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_profile_point"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -110,6 +112,7 @@
             android:textFontWeight="700"/>
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_profile_logout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -158,8 +161,10 @@
     </LinearLayout>
     
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:listitem="@layout/profile_item"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:layout_marginTop="16dp"/>
