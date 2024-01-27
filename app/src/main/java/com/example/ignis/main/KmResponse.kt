@@ -7,6 +7,6 @@ data class KmResponse(
     val user: String,
     val createAt: String,
     val count: Int,
-    val x: Int,
-    val y: Int
+    val x: Double,
+    val y: Double
 )

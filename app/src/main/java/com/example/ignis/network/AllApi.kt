@@ -47,7 +47,7 @@ interface AllApi {
         @Part("request") request: WriteRequest
     ): Call<Void>
 
-    @Multipart // 게시물 상세 조회
+    // 게시물 상세 조회
     @GET("/feed/{feedId}")
     fun detailedRead(
         @Header("Authorization") authorization: String,
@@ -72,7 +72,7 @@ interface AllApi {
         @Query("feedId") feedId: Long
     ): Call<Void>
 
-    @GET("/feed/all?x=0&y=0") // 1km 이내 게시물 조회
+    @GET("/feed/all") // 1km 이내 게시물 조회
     fun km(
         @Header("Authorization") authorization: String,
         @Query("x") x: Double,

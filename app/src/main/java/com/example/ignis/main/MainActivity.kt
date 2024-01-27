@@ -5,11 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,9 +22,12 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.ignis.R
 import com.example.ignis.databinding.ActivityMainBinding
+import com.example.ignis.detail.DetailActivity
 import com.example.ignis.network.AllApi
 import com.example.ignis.network.RetrofitClient
 import com.example.ignis.profile.ProfileActivity
+import com.example.ignis.signup.SignupRequest
+import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -31,19 +38,18 @@ import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
-import com.kakao.vectormap.MapView
-import com.kakao.vectormap.RoadViewRequest.Marker
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
-import com.kakao.vectormap.shape.MapPoints
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
@@ -52,18 +58,27 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mLocationRequest: LocationRequest
     private var kakaoMap: KakaoMap? = null
     private var myLocation: Location? = null
-    private val retrofit: Retrofit = RetrofitClient.getInstance()
-    private val allApi: AllApi = retrofit.create(AllApi::class.java)
+    private var isFirst = true
 
     companion object {
         const val REQUEST_PERMISSION_LOCATION = 10
     }
+
+    val imageDownloadTask = ImageDownloadTask(object : ImageDownloadTask.OnImageDownloadListener {
+        override fun onImageDownloaded(bitmap: Bitmap?) {
+            if (bitmap != null) {
+
+            }
+        }
+    })
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.apply {
+
             UserApiClient.instance.me { user, _ ->
                 Glide
                     .with(baseContext)
@@ -76,34 +91,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
-
-            val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
-            val token = sharedPreferences.getString("access_token", "")
-            if(token != null && myLocation != null) {
-                allApi.km(
-                    authorization = token,
-                    x = myLocation!!.latitude,
-                    y = myLocation!!.longitude
-                ).enqueue(object : Callback<List<KmResponse>> {
-                    override fun onResponse(
-                        call: Call<List<KmResponse>>,
-                        response: Response<List<KmResponse>>
-                    ) {
-                        when(response.code()) {
-                            200 -> {
-                                for(data in response.body()!!) {
-
-                                }
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<List<KmResponse>>, t: Throwable) {
-                        Toast.makeText(baseContext,"서버 에러",Toast.LENGTH_SHORT).show()
-                    }
-
-                })
-            }
 
             KeyboardVisibilityEvent.setEventListener(
                 this@MainActivity
@@ -173,6 +160,13 @@ class MainActivity : AppCompatActivity() {
                                 LatLng.from(myLocation!!.latitude, myLocation!!.longitude))
                             kakaoMap.moveCamera(cameraUpdate, CameraAnimation.from(300, true, true))
                         }
+
+                        kakaoMap.setOnLabelClickListener { kakaoMap, layer, label ->
+                            val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                            intent.putExtra("Id", label.tag.toString().toLong())
+                            startActivity(intent)
+                        }
+
                     }
 
                     override fun getZoomLevel(): Int {
@@ -182,6 +176,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
     private fun startLocationUpdates() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -212,6 +207,38 @@ class MainActivity : AppCompatActivity() {
 
         label.show()
 
+        if (isFirst) {
+            val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
+            val token = sharedPreferences.getString("access_token", "")
+
+            val retrofitAPI = RetrofitClient.getInstance().create(AllApi::class.java)
+            val call: Call<List<KmResponse>> = retrofitAPI.km("Bearer $token", myLocation!!.longitude, myLocation!!.latitude)
+            call.enqueue(object : Callback<List<KmResponse>> {
+                override fun onResponse(call: Call<List<KmResponse>>, response: Response<List<KmResponse>>) {
+                    Log.d("확인", response.body().toString())
+                    response.body()!!.forEach {
+                        val styles1 = kakaoMap!!.labelManager!!
+                            .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.pin)))
+                        val options1: LabelOptions =
+                            LabelOptions.from(LatLng.from(it.y, it.x))
+                                .setStyles(styles1)
+
+                        val layer1 = kakaoMap!!.labelManager!!.layer
+                        val label1 = layer1!!.addLabel(options1)
+
+                        label1.tag = it.id
+                        label1.show()
+
+                        isFirst = false
+                    }
+                }
+
+                override fun onFailure(call: Call<List<KmResponse>>, t: Throwable) {
+                    Log.d("확인", t.toString())
+                }
+            })
+        }
+
     }
 
 
@@ -232,6 +259,36 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "권한이 없어 지도를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    class ImageDownloadTask(private val listener: OnImageDownloadListener) : AsyncTask<String, Void, Bitmap?>() {
+
+        interface OnImageDownloadListener {
+            fun onImageDownloaded(bitmap: Bitmap?)
+        }
+
+        override fun doInBackground(vararg params: String?): Bitmap? {
+            val imageUrl = params[0]
+
+            try {
+                val url = URL(imageUrl)
+                val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+                connection.doInput = true
+                connection.connect()
+
+                val input: InputStream = connection.inputStream
+                return BitmapFactory.decodeStream(input)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            return null
+        }
+
+        override fun onPostExecute(result: Bitmap?) {
+            super.onPostExecute(result)
+            listener.onImageDownloaded(result)
         }
     }
 
