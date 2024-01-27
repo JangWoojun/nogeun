@@ -3,37 +3,46 @@ package com.example.ignis
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.location.Location
-import com.google.android.gms.location.LocationRequest
 import android.os.Bundle
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.ignis.databinding.ActivityMainBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private lateinit var mLocationRequest: LocationRequest
-    private val REQUEST_PERMISSION_LOCATION = 10
     private var kakaoMap: KakaoMap? = null
     private var myLocation: Location? = null
     companion object {
-        const val TAG = "확인"
+        const val REQUEST_PERMISSION_LOCATION = 10
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +50,41 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
+            KeyboardVisibilityEvent.setEventListener(
+                this@MainActivity
+            ) { isOpen ->
+                if (isOpen) {
+                    inputText.hint = "검색어를 입력해주세요"
+                    searchButton.visibility = View.VISIBLE
+                    photoUploadButton.visibility = View.GONE
+                    myLocationButton.visibility = View.GONE
+                } else {
+                    inputText.hint = "터치해서 동네 사진 검색하기"
+                    searchButton.visibility = View.GONE
+                    photoUploadButton.visibility = View.VISIBLE
+                    myLocationButton.visibility = View.VISIBLE
+                }
+            }
+
+
+            inputText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+                    // 텍스트 변경 전에 호출
+                }
+
+                override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (inputText.text.isNotEmpty()) {
+                        val newBackgroundColor = ContextCompat.getColor(this@MainActivity, R.color.primary)
+                        searchButton.backgroundTintList = ColorStateList.valueOf(newBackgroundColor)
+                    } else {
+                        val newBackgroundColor = ContextCompat.getColor(this@MainActivity, R.color.gray500)
+                        searchButton.backgroundTintList = ColorStateList.valueOf(newBackgroundColor)
+                    }
+                }
+
+                override fun afterTextChanged(editable: Editable?) {
+                }
+            })
 
             mLocationRequest =  LocationRequest.create().apply {
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -58,6 +102,12 @@ class MainActivity : AppCompatActivity() {
                         this@MainActivity.kakaoMap = kakaoMap
                         if (checkPermissionForLocation(this@MainActivity)) {
                             startLocationUpdates()
+                        }
+
+                        myLocationButton.setOnClickListener {
+                            val cameraUpdate = CameraUpdateFactory.newCenterPosition(
+                                LatLng.from(myLocation!!.latitude, myLocation!!.longitude))
+                            kakaoMap.moveCamera(cameraUpdate, CameraAnimation.from(300, true, true))
                         }
                     }
 

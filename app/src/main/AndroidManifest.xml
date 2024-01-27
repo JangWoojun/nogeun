@@ -40,6 +40,7 @@
 
         </activity>
         <activity
+            android:windowSoftInputMode="adjustResize"
             android:name=".MainActivity"
             android:exported="true">
 
