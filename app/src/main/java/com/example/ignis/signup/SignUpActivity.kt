@@ -27,6 +27,9 @@ class SignUpActivity : AppCompatActivity(), NameFragment.NameFragmentListener {
         setContentView(binding.root)
 
         binding.apply {
+            backButton.setOnClickListener {
+                finish()
+            }
             if (savedInstanceState == null) {
                 val nameFragment = NameFragment()
                 nameFragment.setListener(this@SignUpActivity)
