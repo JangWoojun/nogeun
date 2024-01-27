@@ -114,6 +114,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
+                    android:id="@+id/tv_detail_like"
                     android:fontFamily="@font/default_font"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -186,6 +187,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"

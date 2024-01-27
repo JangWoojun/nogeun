@@ -27,6 +27,7 @@
             android:layout_marginStart="12dp"/>
 
         <TextView
+            android:id="@+id/tv_detail_item_date"
             android:fontFamily="@font/default_font"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
