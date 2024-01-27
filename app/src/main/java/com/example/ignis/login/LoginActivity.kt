@@ -1,9 +1,10 @@
-package com.example.ignis
+package com.example.ignis.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.ignis.MainActivity
 import com.example.ignis.databinding.ActivityLoginBinding
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -29,7 +30,8 @@ class LoginActivity : AppCompatActivity() {
                     Log.e(TAG, "사용자 정보 요청 실패", error)
                 }
                 else if (user != null) {
-                    Log.i(TAG, "사용자 정보 요청 성공" +
+                    Log.i(
+                        TAG, "사용자 정보 요청 성공" +
                             "\n회원번호: ${user.id}" +
                             "\n이메일: ${user.kakaoAccount?.email}" +
                             "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
@@ -66,7 +68,8 @@ class LoginActivity : AppCompatActivity() {
                                     Log.e(TAG, "사용자 정보 요청 실패", error)
                                 }
                                 else if (user != null) {
-                                    Log.i(TAG,
+                                    Log.i(
+                                        TAG,
                                         "사용자 정보 요청 성공" +
                                         "\n회원번호: ${user.id}" +
                                         "\n이메일: ${user.kakaoAccount?.email}" +
