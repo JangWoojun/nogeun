@@ -15,6 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ignis"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.kakao.vectormap.APP_KEY"
+            android:value="c8173cd37ae24858bdc1a57832061386"/>
+
         <activity
             android:name=".LoginActivity"
             android:exported="true" >
