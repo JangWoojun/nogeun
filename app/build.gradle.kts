@@ -58,4 +58,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    implementation("com.google.android.gms:play-services-location:21.1.0")
+
 }
