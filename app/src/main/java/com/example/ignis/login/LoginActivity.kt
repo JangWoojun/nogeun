@@ -1,15 +1,27 @@
 package com.example.ignis.login
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.example.ignis.main.MainActivity
 import com.example.ignis.databinding.ActivityLoginBinding
+import com.example.ignis.network.AllApi
+import com.example.ignis.network.RetrofitClient
+import com.example.ignis.signup.SignUpActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.kakao.vectormap.LatLng
+import com.kakao.vectormap.label.LabelOptions
+import com.kakao.vectormap.label.LabelStyle
+import com.kakao.vectormap.label.LabelStyles
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -23,21 +35,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
-
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-            UserApiClient.instance.me { user, error ->
-                if (error != null) {
-                    Log.e(TAG, "사용자 정보 요청 실패", error)
-                }
-                else if (user != null) {
-                    Log.i(
-                        TAG, "사용자 정보 요청 성공" +
-                            "\n회원번호: ${user.id}" +
-                            "\n이메일: ${user.kakaoAccount?.email}" +
-                            "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
-                            "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}")
-                }
-            }
 
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
@@ -63,19 +60,38 @@ class LoginActivity : AppCompatActivity() {
                             UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
                         } else if (token != null) {
                             Log.i(TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
-                            UserApiClient.instance.me { user, error ->
-                                if (error != null) {
-                                    Log.e(TAG, "사용자 정보 요청 실패", error)
-                                }
-                                else if (user != null) {
-                                    Log.i(
-                                        TAG,
-                                        "사용자 정보 요청 성공" +
-                                        "\n회원번호: ${user.id}" +
-                                        "\n이메일: ${user.kakaoAccount?.email}" +
-                                        "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
-                                        "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}"
+                            Log.d("확인", "0")
+                            UserApiClient.instance.me { user, _ ->
+                                if (user != null) {
+                                    val retrofitAPI = RetrofitClient.getInstance().create(AllApi::class.java)
+                                    val call: Call<LoginResponse> = retrofitAPI.login(
+                                        LoginRequest(
+                                            user.kakaoAccount?.profile?.nickname.toString(),
+                                            user.kakaoAccount?.email.toString(),
+                                            user.kakaoAccount?.profile?.profileImageUrl.toString()
+                                        )
                                     )
+
+                                    call.enqueue(object : Callback<LoginResponse> {
+                                        override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                                            if (response.isSuccessful) {
+                                                Log.d("확인", "1")
+                                                if (response.body()?.is_signed_up == true) {
+                                                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                                } else {
+                                                    startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
+                                                }
+                                            } else {
+                                                Log.d("확인", "2")
+                                                Log.d("확인", response.body().toString())
+                                                Toast.makeText(this@LoginActivity, "실패했습니다.", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+
+                                        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                                            Toast.makeText(this@LoginActivity, "실패했습니다.", Toast.LENGTH_SHORT).show()
+                                        }
+                                    })
                                 }
                             }
                         }
