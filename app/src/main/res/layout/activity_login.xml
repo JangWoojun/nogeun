@@ -22,7 +22,9 @@
             android:text="노인 근처의 커뮤니티"
             android:textSize="22sp"
             android:textColor="@color/gray900"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif-medium"
+            android:textFontWeight="600"/>
 
         <ImageView
             android:layout_width="230dp"
@@ -47,6 +49,8 @@
         android:paddingEnd="16dp"
         android:textSize="24sp"
         android:textColor="@color/gray900"
+        android:fontFamily="sans-serif-medium"
+        android:textFontWeight="500"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
