@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     private var instance: Retrofit? = null
-    private const val BASE_URL = "https://port-0-ignis-backend-f02w2almh8gdgs.sel5.cloudtype.app"
+    private const val BASE_URL = "https://oneus.shop"
 
     fun getInstance(): Retrofit {
         if (instance == null) {

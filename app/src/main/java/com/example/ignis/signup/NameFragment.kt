@@ -11,6 +11,14 @@ class NameFragment : Fragment() {
     private var _binding: FragmentNameBinding? = null
 
     private val binding get() = _binding!!
+
+    interface NameFragmentListener {
+        fun onButtonNameClicked(data: String)
+    }
+
+    private lateinit var listener: NameFragmentListener
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -26,13 +34,22 @@ class NameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-
+            button.setOnClickListener {
+                val data = input.text.toString()
+                listener.onButtonNameClicked(data)
+            }
         }
+
+    }
+
+    fun setListener(listener: NameFragmentListener) {
+        this.listener = listener
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
 
 }

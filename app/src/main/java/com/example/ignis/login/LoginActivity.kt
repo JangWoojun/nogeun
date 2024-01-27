@@ -83,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
                                                 }
                                             } else {
                                                 Log.d("확인", "2")
-                                                Log.d("확인", response.body().toString())
+                                                Log.d("확인", response.toString())
                                                 Toast.makeText(this@LoginActivity, "실패했습니다.", Toast.LENGTH_SHORT).show()
                                             }
                                         }

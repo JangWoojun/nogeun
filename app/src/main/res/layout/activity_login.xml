@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".login.LoginActivity">
 
     <LinearLayout
@@ -36,6 +37,7 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:outlineProvider="none"
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="64dp"
