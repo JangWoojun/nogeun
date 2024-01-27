@@ -51,4 +51,10 @@ dependencies {
     implementation("com.kakao.sdk:v2-user:2.19.0") // 카카오 로그인
     implementation("com.kakao.maps.open:android:2.6.3")
 
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 }
