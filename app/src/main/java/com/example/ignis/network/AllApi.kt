@@ -8,7 +8,7 @@ import com.example.ignis.detail.ReadResponse
 import com.example.ignis.main.SearchResponse
 import com.example.ignis.signup.SignupRequest
 import com.example.ignis.userInfo.UserInfoResponse
-import com.example.ignis.main.WriteResponse
+import com.example.ignis.main.WriteRequest
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -44,7 +44,7 @@ interface AllApi {
         @Header("Authorization") authorization: String,
         @Part("title") title: String,
         @Part file: MultipartBody.Part,
-        @Part("request") request: WriteResponse
+        @Part("request") request: WriteRequest
     ): Call<Void>
 
     @Multipart // 게시물 상세 조회
