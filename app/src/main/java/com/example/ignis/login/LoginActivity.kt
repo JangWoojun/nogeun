@@ -1,5 +1,6 @@
 package com.example.ignis.login
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -72,7 +73,14 @@ class LoginActivity : AppCompatActivity() {
                                         )
                                     )
 
+                                    val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
+                                    val editor = sharedPreferences.edit()
+
+                                    editor.putString("key", token.accessToken)
+                                    editor.apply()
+
                                     call.enqueue(object : Callback<LoginResponse> {
+
                                         override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                                             if (response.isSuccessful) {
                                                 Log.d("확인", "1")

@@ -1,5 +1,6 @@
 package com.example.ignis.signup
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -46,24 +47,25 @@ class SignUpActivity : AppCompatActivity(), NameFragment.NameFragmentListener {
     }
 
     fun onButtonAgeClicked(data: SignupRequest) {
+        val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
+        val token = sharedPreferences.getString("key", "")
         val retrofitAPI = RetrofitClient.getInstance().create(AllApi::class.java)
-        UserApiClient.instance.loginWithKakaoTalk(this@SignUpActivity) { token, error ->
-            val call: Call<Void> = retrofitAPI.signup("Bearer "+token!!.accessToken, SignupRequest(data.age, data.user_name))
+        val call: Call<Void> = retrofitAPI.signup("Bearer $token", SignupRequest(data.age, data.user_name))
 
-            Log.d("확인", data.toString())
+        Log.d("확인", data.toString())
 
-            call.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    Log.d("확인", response.body().toString())
-                    startActivity(Intent(this@SignUpActivity, MainActivity::class.java))
-                }
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                Log.d("확인", response.body().toString())
+                startActivity(Intent(this@SignUpActivity, MainActivity::class.java))
+            }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.d("확인", t.toString())
-                    Toast.makeText(this@SignUpActivity, "실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
-
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.d("확인", t.toString())
+                Toast.makeText(this@SignUpActivity, "실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
+
+
 }
