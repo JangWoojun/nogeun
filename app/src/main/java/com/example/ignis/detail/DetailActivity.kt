@@ -3,6 +3,7 @@ package com.example.ignis.detail
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.ignis.R
 import com.example.ignis.databinding.ActivityDetailBinding
@@ -44,6 +45,9 @@ class DetailActivity : AppCompatActivity() {
                                     tvDetailName.text = user
                                     tvDetailDate.text = createAt
                                     tvDetailLike.text = "$count 개"
+
+                                    rvDetail.adapter = DetailAdapter(comments,baseContext)
+                                    rvDetail.layoutManager = LinearLayoutManager(baseContext)
                                 }
                             }
                         }
