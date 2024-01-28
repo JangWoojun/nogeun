@@ -2,12 +2,14 @@ package com.example.ignis.detail
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -76,6 +78,7 @@ class DetailActivity : AppCompatActivity() {
                 }
             })
 
+            var isLiked:Boolean = false
 
             binding.btnDetailLike.setOnClickListener {
                 allApi.addLike("Bearer $token", feedId = id).enqueue(object : Callback<LikeResponse> {
@@ -85,7 +88,18 @@ class DetailActivity : AppCompatActivity() {
                     ) {
                         when(response.code()) {
                             200 -> {
-
+                                isLiked = !isLiked
+                                if(isLiked) {
+                                    binding.tvDetailLikeContent.text = "좋아요를 눌렀습니다"
+                                    val newColor = ContextCompat.getColor(this@DetailActivity,R.color.primary)
+                                    binding.btnDetailLike.backgroundTintList = ColorStateList.valueOf(newColor)
+                                    binding.btnDetailLike.setImageResource(R.drawable.baseline_favorite_24_white)
+                                } else {
+                                    binding.tvDetailLikeContent.text = "터치해서 좋아요 누르기"
+                                    val newColor = ContextCompat.getColor(this@DetailActivity,R.color.gray100)
+                                    binding.btnDetailLike.backgroundTintList = ColorStateList.valueOf(newColor)
+                                    binding.btnDetailLike.setImageResource(R.drawable.baseline_favorite_24_gray)
+                                }
                             }
 
                         }
@@ -99,7 +113,7 @@ class DetailActivity : AppCompatActivity() {
 
             binding.tvDetailSend.setOnClickListener {
                 if(binding.etDetailComment.text.toString().isNotEmpty()) {
-                    allApi.comment("Bearer $token", feedId = id).enqueue(object : Callback<Void> {
+                    allApi.comment("Bearer $token", feedId = id, comment = binding.etDetailComment.text.toString()).enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             when(response.code()) {
                                 200 -> {
@@ -127,8 +141,12 @@ class DetailActivity : AppCompatActivity() {
 
                 @SuppressLint("ResourceAsColor")
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if(s != null) {
+                    Log.d("TEST","x${binding.etDetailComment.text}")
+                    if(binding.etDetailComment.text != null) {
                         binding.tvDetailSend.setTextColor(R.color.primary)
+                        binding.tvDetailSend.textColors
+                    } else {
+                        binding.tvDetailSend.setTextColor(R.color.gray300)
                     }
                 }
 

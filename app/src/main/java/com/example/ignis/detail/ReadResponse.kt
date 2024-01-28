@@ -11,9 +11,9 @@ data class ReadResponse(
 )
 
 data class Comment(
-    val authorId: Int,
-    val authorName: String,
-    val authorProfileUrl: String,
+    val author_id: Int,
+    val author_name: String,
+    val author_profile_url: String,
     val content: String,
-    val createdDate: String
+    val created_date: String
 )

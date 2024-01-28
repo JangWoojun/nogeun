@@ -147,6 +147,7 @@
                 android:background="@drawable/like_btn_back"/>
 
             <TextView
+                android:id="@+id/tv_detail_like_content"
                 android:fontFamily="@font/default_font"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

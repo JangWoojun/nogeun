@@ -63,13 +63,14 @@ interface AllApi {
     @POST("/feed/count/{feedId}") // 좋아요
     fun addLike(
         @Header("Authorization") authorization: String,
-        @Query("feedId") feedId: Long
+        @Path("feedId") feedId: Long
     ): Call<LikeResponse>
 
     @POST("/comment/{feedId}?comment") // 댓글 달기
     fun comment(
         @Header("Authorization") authorization: String,
-        @Query("feedId") feedId: Long
+        @Path("feedId") feedId: Long,
+        @Query("comment") comment: String,
     ): Call<Void>
 
     @GET("/feed/all") // 1km 이내 게시물 조회
