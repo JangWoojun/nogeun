@@ -9,8 +9,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -18,6 +22,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -42,6 +47,7 @@ import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
+import com.kakao.vectormap.camera.CameraUpdateFactory.zoomTo
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
@@ -52,6 +58,7 @@ import retrofit2.Response
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.Locale
 
 
 class MainActivity : AppCompatActivity() {
@@ -61,9 +68,12 @@ class MainActivity : AppCompatActivity() {
     private var kakaoMap: KakaoMap? = null
     private var myLocation: Location? = null
     private var isFirst = true
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private lateinit var recognizerIntent: Intent
 
     companion object {
         const val REQUEST_PERMISSION_LOCATION = 10
+        const val RECORD_AUDIO_PERMISSION_CODE = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +82,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
+            checkPermission()
+
+            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this@MainActivity)
+            speechRecognizer.setRecognitionListener(recognitionListener)
+
+            recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "검색하실 단어를 말하세요!")
+
+            searchVoiceButton.setOnClickListener {
+                Toast.makeText(this@MainActivity, "검색하실 단어를 말하세요!", Toast.LENGTH_LONG).show()
+                speechRecognizer.startListening(recognizerIntent)
+            }
 
             UserApiClient.instance.me { user, _ ->
                 Glide
@@ -82,6 +106,11 @@ class MainActivity : AppCompatActivity() {
 
             myImage.setOnClickListener {
                 val intent = Intent(this@MainActivity, ProfileActivity::class.java)
+                startActivity(intent)
+            }
+            searchButton.setOnClickListener {
+                val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                intent.putExtra("title", inputText.text.toString())
                 startActivity(intent)
             }
 
@@ -162,6 +191,7 @@ class MainActivity : AppCompatActivity() {
                         myLocationButton.setOnClickListener {
                             val cameraUpdate = CameraUpdateFactory.newCenterPosition(
                                 LatLng.from(myLocation!!.latitude, myLocation!!.longitude))
+                            kakaoMap.moveCamera(zoomTo(16))
                             kakaoMap.moveCamera(cameraUpdate, CameraAnimation.from(300, true, true))
                         }
 
@@ -179,6 +209,44 @@ class MainActivity : AppCompatActivity() {
                 })
 
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkPermission() {
+        if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), RECORD_AUDIO_PERMISSION_CODE)
+        }
+    }
+
+    private val recognitionListener = object : RecognitionListener {
+        override fun onReadyForSpeech(params: Bundle?) {}
+
+        override fun onBeginningOfSpeech() {}
+
+        override fun onRmsChanged(rmsdB: Float) {}
+
+        override fun onBufferReceived(buffer: ByteArray?) {}
+
+        override fun onEndOfSpeech() {}
+
+        override fun onError(error: Int) {}
+
+        override fun onResults(results: Bundle?) {
+            val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+            if (!matches.isNullOrEmpty()) {
+                val result = matches[0]
+                binding.inputText.setText(result)
+            }
+        }
+
+        override fun onPartialResults(partialResults: Bundle?) {}
+
+        override fun onEvent(eventType: Int, params: Bundle?) {}
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        speechRecognizer.destroy()
     }
 
     private fun startLocationUpdates() {
