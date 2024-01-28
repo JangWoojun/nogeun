@@ -117,6 +117,7 @@ class DetailActivity : AppCompatActivity() {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             when(response.code()) {
                                 200 -> {
+                                    binding.rvDetail.adapter?.notifyDataSetChanged()
                                     binding.etDetailComment.text.clear()
                                 }
                             }
