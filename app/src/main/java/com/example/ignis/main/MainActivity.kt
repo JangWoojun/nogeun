@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             photoUploadButton.setOnClickListener {
-                val bottomSheet = BottomSheet(this@MainActivity)
+                val bottomSheet = BottomSheet()
                 bottomSheet.show(supportFragmentManager, bottomSheet.tag)
             }
 
@@ -148,6 +148,7 @@ class MainActivity : AppCompatActivity() {
                         val newBackgroundColor = ContextCompat.getColor(this@MainActivity,
                             R.color.primary
                         )
+
                         searchButton.backgroundTintList = ColorStateList.valueOf(newBackgroundColor)
                     } else {
                         val newBackgroundColor = ContextCompat.getColor(this@MainActivity,
@@ -261,56 +262,64 @@ class MainActivity : AppCompatActivity() {
 
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
-            onLocationChanged(locationResult.lastLocation!!)
+            onLocationChanged(locationResult.lastLocation)
         }
     }
 
-    fun onLocationChanged(location: Location) {
-        val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
-        kakaoMap!!.moveCamera(cameraUpdate)
+    fun onLocationChanged(location: Location?) {
+        if (location != null) {
+            val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
+            kakaoMap!!.moveCamera(cameraUpdate)
 
-        myLocation = location
+            myLocation = location
 
-        val styles = kakaoMap!!.labelManager!!
-            .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.my_location)))
-        val options: LabelOptions =
-            LabelOptions.from(LatLng.from(location.latitude, location.longitude)).setStyles(styles)
-        val layer = kakaoMap!!.labelManager!!.layer
-        val label = layer!!.addLabel(options)
+            val styles = kakaoMap?.labelManager?.addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.my_location)))
+            val options: LabelOptions =
+                LabelOptions.from(LatLng.from(location.latitude, location.longitude)).setStyles(styles)
+            val layer = kakaoMap!!.labelManager!!.layer
+            val label = layer!!.addLabel(options)
 
-        label.show()
+            label.show()
 
-        if (isFirst) {
-            val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
-            val token = sharedPreferences.getString("access_token", "")
+            if (isFirst) {
+                val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
+                val token = sharedPreferences.getString("access_token", "")
 
-            val retrofitAPI = RetrofitClient.getInstance().create(AllApi::class.java)
-            val call: Call<List<KmResponse>> = retrofitAPI.km("Bearer $token", myLocation!!.longitude, myLocation!!.latitude)
-            call.enqueue(object : Callback<List<KmResponse>> {
-                override fun onResponse(call: Call<List<KmResponse>>, response: Response<List<KmResponse>>) {
-                    Log.d("확인", response.body().toString())
-                    response.body()!!.forEach {
-                        val styles1 = kakaoMap!!.labelManager!!
-                            .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.pin).setZoomLevel(16)))
-                        val options1: LabelOptions =
-                            LabelOptions.from(LatLng.from(it.y, it.x))
-                                .setStyles(styles1)
+                val retrofitAPI = RetrofitClient.getInstance().create(AllApi::class.java)
+                val call: Call<List<KmResponse>> = retrofitAPI.km("Bearer $token", myLocation!!.longitude, myLocation!!.latitude)
+                call.enqueue(object : Callback<List<KmResponse>> {
+                    override fun onResponse(call: Call<List<KmResponse>>, response: Response<List<KmResponse>>) {
+                        Log.d("확인", response.body().toString())
+                        response.body()!!.forEach {
+                            val styles1 = kakaoMap!!.labelManager!!
+                                .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.pin).setZoomLevel(16)))
+                            val options1: LabelOptions =
+                                LabelOptions.from(LatLng.from(it.y, it.x))
+                                    .setStyles(styles1)
 
-                        val layer1 = kakaoMap!!.labelManager!!.layer
-                        val label1 = layer1!!.addLabel(options1)
+                            val layer1 = kakaoMap!!.labelManager!!.layer
+                            val label1 = layer1!!.addLabel(options1)
 
-                        label1.tag = it.id
-                        label1.show()
+                            label1.tag = it.id
+                            label1.show()
 
-                        isFirst = false
+                            isFirst = false
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<List<KmResponse>>, t: Throwable) {
-                    Log.d("확인", t.toString())
-                }
-            })
+                    override fun onFailure(call: Call<List<KmResponse>>, t: Throwable) {
+                        Log.d("확인", t.toString())
+                    }
+                })
+            }
+
+            val myPreferences = MyPreferences(this)
+
+            myPreferences.saveDouble("x", location.longitude)
+            myPreferences.saveDouble("y", location.latitude)
+
         }
+
 
     }
 

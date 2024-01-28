@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -23,11 +21,9 @@ import com.example.ignis.R
 import com.example.ignis.write.WriteActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class BottomSheet(context: Context) : BottomSheetDialogFragment() {
+class BottomSheet : BottomSheetDialogFragment() {
 
     private val PICK_IMAGE_REQUEST = 1
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
