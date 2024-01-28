@@ -3,6 +3,7 @@ package com.example.ignis.result
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ignis.R
@@ -24,6 +25,7 @@ class ResultActivity : AppCompatActivity() {
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.linearResult.setOnClickListener { finish() }
         val title = intent.extras?.getString("title")
 
         val sharedPreferences = getSharedPreferences("myPreferences", Context.MODE_PRIVATE)
@@ -50,6 +52,7 @@ class ResultActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 Toast.makeText(baseContext,"서버 에러", Toast.LENGTH_SHORT).show()
+                Log.d("TEST","e$t")
             }
         })
     }

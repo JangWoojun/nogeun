@@ -33,6 +33,7 @@ import com.example.ignis.detail.DetailActivity
 import com.example.ignis.network.AllApi
 import com.example.ignis.network.RetrofitClient
 import com.example.ignis.profile.ProfileActivity
+import com.example.ignis.result.ResultActivity
 import com.example.ignis.signup.SignupRequest
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -109,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             searchButton.setOnClickListener {
-                val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                val intent = Intent(this@MainActivity, ResultActivity::class.java)
                 intent.putExtra("title", inputText.text.toString())
                 startActivity(intent)
             }
