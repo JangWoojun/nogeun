@@ -46,8 +46,9 @@ class DetailActivity : AppCompatActivity() {
                                 binding.apply {
                                     Glide
                                         .with(baseContext)
-                                        .load(imageUrl)
+                                        .load(image_url)
                                         .into(ivDetail)
+                                    Log.d("TEST","v $image_url")
                                     tvDetailTitle.text = title
                                     tvDetailName.text = user
                                     tvDetailDate.text = createAt

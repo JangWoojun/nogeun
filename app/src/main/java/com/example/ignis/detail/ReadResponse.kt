@@ -3,7 +3,7 @@ package com.example.ignis.detail
 data class ReadResponse(
     val id: Int,
     val title: String,
-    val imageUrl: String,
+    val image_url: String,
     val user: String,
     val createAt: String,
     val count: Int,
