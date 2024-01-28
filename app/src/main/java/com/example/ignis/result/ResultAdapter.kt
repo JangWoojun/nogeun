@@ -25,7 +25,7 @@ class ResultAdapter(private val itemList: List<Feed>, private val context: Conte
         itemList[position].apply {
             Glide
                 .with(context)
-                .load(imageUrl)
+                .load(image_url)
                 .into(holder.img)
             holder.title.text = title
             holder.name.text = user

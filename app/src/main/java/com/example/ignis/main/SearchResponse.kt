@@ -7,7 +7,7 @@ data class SearchResponse(
 data class Feed(
     val id: Long,
     val title: String,
-    val imageUrl: String,
+    val image_url: String,
     val user: String,
     val createAt: String,
     val count: Long,

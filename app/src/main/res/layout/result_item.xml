@@ -9,7 +9,8 @@
     <ImageView
         android:id="@+id/iv_result_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="400dp"
+        android:adjustViewBounds="true" />
 
     <TextView
         android:id="@+id/tv_result_item_title"
