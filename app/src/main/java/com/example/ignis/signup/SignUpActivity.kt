@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import com.example.ignis.R
 import com.example.ignis.databinding.ActivitySignUpBinding
@@ -25,6 +26,9 @@ class SignUpActivity : AppCompatActivity(), NameFragment.NameFragmentListener {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+
 
         binding.apply {
             backButton.setOnClickListener {
@@ -61,6 +65,7 @@ class SignUpActivity : AppCompatActivity(), NameFragment.NameFragmentListener {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 Log.d("확인", response.body().toString())
                 startActivity(Intent(this@SignUpActivity, MainActivity::class.java))
+                finish()
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {

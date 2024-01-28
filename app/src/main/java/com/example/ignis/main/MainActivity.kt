@@ -14,7 +14,9 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -63,14 +65,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val REQUEST_PERMISSION_LOCATION = 10
     }
-
-    val imageDownloadTask = ImageDownloadTask(object : ImageDownloadTask.OnImageDownloadListener {
-        override fun onImageDownloaded(bitmap: Bitmap?) {
-            if (bitmap != null) {
-
-            }
-        }
-    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,6 +130,16 @@ class MainActivity : AppCompatActivity() {
                 override fun afterTextChanged(editable: Editable?) {
                 }
             })
+
+            inputText.setOnEditorActionListener { _, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE || (event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                    intent.putExtra("title", inputText.text.toString())
+                    startActivity(intent)
+                    return@setOnEditorActionListener true // Consume the event
+                }
+                false // Let the system handle the event
+            }
 
             mLocationRequest =  LocationRequest.create().apply {
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY

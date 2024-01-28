@@ -79,6 +79,7 @@ class WriteActivity : AppCompatActivity() {
                                 200 -> {
                                     val intent = Intent(this@WriteActivity, MainActivity::class.java)
                                     startActivity(intent)
+                                    finishAffinity()
                                 }
                             }
                         }

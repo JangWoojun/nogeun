@@ -85,6 +85,7 @@ class LoginActivity : AppCompatActivity() {
                                                 Log.d("TEST","token: ${response.body()!!.access_token}")
                                                 if (response.body()?.is_signed_up == true) {
                                                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                                    finishAffinity()
                                                 } else {
                                                     startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
                                                 }
