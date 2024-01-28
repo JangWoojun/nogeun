@@ -38,8 +38,8 @@ RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
 
     inner class ProfileViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.tv_profile_item_title)
-        val name: TextView = view.findViewById(R.id.tv_detail_item_name)
-        val date: TextView = view.findViewById(R.id.tv_detail_item_date)
+        val name: TextView = view.findViewById(R.id.tv_profile_item_name)
+        val date: TextView = view.findViewById(R.id.tv_profile_item_date)
         val like: TextView = view.findViewById(R.id.tv_profile_item_like_cnt)
     }
 }
