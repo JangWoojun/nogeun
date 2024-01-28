@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun getZoomLevel(): Int {
-                        return 15
+                        return 16
                     }
                 })
 
@@ -222,7 +222,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("확인", response.body().toString())
                     response.body()!!.forEach {
                         val styles1 = kakaoMap!!.labelManager!!
-                            .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.pin)))
+                            .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.pin).setZoomLevel(16)))
                         val options1: LabelOptions =
                             LabelOptions.from(LatLng.from(it.y, it.x))
                                 .setStyles(styles1)

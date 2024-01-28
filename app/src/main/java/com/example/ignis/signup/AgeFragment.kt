@@ -2,6 +2,7 @@ package com.example.ignis.signup
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
@@ -70,9 +71,13 @@ class AgeFragment : Fragment() {
 
             button.setOnClickListener {
                 if (input.text.isNotEmpty()) {
-                    val data = arguments?.getString(ARG_DATA)
-                    val response = SignupRequest(input.text.toString().toInt(), data.toString())
-                    (activity as? SignUpActivity)?.onButtonAgeClicked(response)
+                    success.visibility = View.VISIBLE
+                    input.visibility = View.GONE
+                    Handler().postDelayed({
+                        val data = arguments?.getString(ARG_DATA)
+                        val response = SignupRequest(input.text.toString().toInt(), data.toString())
+                        (activity as? SignUpActivity)?.onButtonAgeClicked(response)
+                    }, 1000)
                 }
             }
         }
