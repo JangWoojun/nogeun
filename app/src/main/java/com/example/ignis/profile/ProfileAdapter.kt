@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ignis.R
 import com.example.ignis.userInfo.Feed
+import de.hdodenhof.circleimageview.CircleImageView
 
 class ProfileAdapter(private val itemList: List<Feed>, private val context: Context) :
 RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
@@ -24,10 +25,6 @@ RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
 
     override fun onBindViewHolder(holder: ProfileAdapter.ProfileViewHolder, position: Int) {
         itemList[position].apply {
-            Glide
-                .with(context)
-                .load(image_url)
-                .into(holder.img)
             holder.title.text = title
             holder.name.text = author_name
             holder.date.text = created_date
@@ -40,7 +37,6 @@ RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
     }
 
     inner class ProfileViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val img: ImageView = view.findViewById(R.id.iv_detail_item_profile)
         val title: TextView = view.findViewById(R.id.tv_profile_item_title)
         val name: TextView = view.findViewById(R.id.tv_detail_item_name)
         val date: TextView = view.findViewById(R.id.tv_detail_item_date)
