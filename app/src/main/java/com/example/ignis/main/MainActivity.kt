@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity() {
 
             inputText.setOnEditorActionListener { _, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_DONE || (event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                    val intent = Intent(this@MainActivity, ResultActivity::class.java)
                     intent.putExtra("title", inputText.text.toString())
                     startActivity(intent)
                     return@setOnEditorActionListener true // Consume the event
