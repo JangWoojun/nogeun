@@ -53,7 +53,8 @@
             <ImageView
                 android:id="@+id/iv_detail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="400dp"
+                android:adjustViewBounds="true" />
 
             <TextView
                 android:fontFamily="@font/default_font"
