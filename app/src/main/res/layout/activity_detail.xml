@@ -8,6 +8,7 @@
     tools:context=".detail.DetailActivity">
 
     <LinearLayout
+        android:layout_gravity="center_vertical"
         android:id="@+id/linear_detail"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -15,24 +16,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+
+        <LinearLayout
+            android:layout_gravity="center_vertical"
             android:id="@+id/iv_detail_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/round_arrow_back_ios_24"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="12dp"/>
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:fontFamily="@font/default_font"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="뒤로가기"
-            android:textColor="@color/black"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
-            android:textStyle="bold"
-            android:textSize="24sp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/round_arrow_back_ios_24"
+                android:layout_marginStart="12dp"/>
+
+            <TextView
+                android:fontFamily="@font/default_font"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="뒤로가기"
+                android:textColor="@color/black"
+                android:layout_marginStart="4dp"
+                android:textStyle="bold"
+                android:textSize="24sp"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <ScrollView
@@ -54,10 +62,10 @@
                 android:id="@+id/iv_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintDimensionRatio="1:1"
                 android:adjustViewBounds="true" />
 
             <TextView
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/default_font"
                 android:id="@+id/tv_detail_title"
                 android:layout_width="wrap_content"

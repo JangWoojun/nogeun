@@ -10,6 +10,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.ignis.R
 import com.example.ignis.databinding.ActivityDetailBinding
 import com.example.ignis.network.AllApi
@@ -44,10 +46,17 @@ class DetailActivity : AppCompatActivity() {
                         200-> {
                             response.body()?.apply {
                                 binding.apply {
+                                    val width = resources.displayMetrics.widthPixels
+                                    ivDetail.layoutParams.height = width
+                                    ivDetail.requestLayout()
+
+
                                     Glide
                                         .with(baseContext)
                                         .load(image_url)
+                                        .apply(RequestOptions.centerCropTransform())
                                         .into(ivDetail)
+
                                     Log.d("TEST","v $image_url")
                                     tvDetailTitle.text = title
                                     tvDetailName.text = user
