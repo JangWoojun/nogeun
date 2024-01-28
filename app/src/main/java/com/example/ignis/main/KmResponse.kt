@@ -3,9 +3,9 @@ package com.example.ignis.main
 data class KmResponse(
     val id: Int,
     val title: String,
-    val imageUrl: String,
+    val image_url: String,
     val user: String,
-    val createAt: String,
+    val create_at: String,
     val count: Int,
     val x: Double,
     val y: Double

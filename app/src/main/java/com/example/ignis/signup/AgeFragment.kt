@@ -72,7 +72,7 @@ class AgeFragment : Fragment() {
             button.setOnClickListener {
                 if (input.text.isNotEmpty()) {
                     success.visibility = View.VISIBLE
-                    input.visibility = View.GONE
+                    linearLayout.visibility = View.GONE
                     Handler().postDelayed({
                         val data = arguments?.getString(ARG_DATA)
                         val response = SignupRequest(input.text.toString().toInt(), data.toString())
