@@ -27,6 +27,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.ignis.R
 import com.example.ignis.databinding.ActivityMainBinding
@@ -51,16 +52,21 @@ import com.kakao.vectormap.camera.CameraUpdateFactory.zoomTo
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
+<<<<<<< Updated upstream
 import com.kakao.vectormap.route.RouteLineStyle
 import com.kakao.vectormap.route.RouteLineStyles
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+=======
+import kotlinx.coroutines.Dispatchers
+>>>>>>> Stashed changes
 import kotlinx.coroutines.launch
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
@@ -295,6 +301,7 @@ class MainActivity : AppCompatActivity() {
                 call.enqueue(object : Callback<List<KmResponse>> {
                     override fun onResponse(call: Call<List<KmResponse>>, response: Response<List<KmResponse>>) {
                         Log.d("확인", response.body().toString())
+<<<<<<< Updated upstream
                         response.body()!!.forEach {
                             GlobalScope.launch(Dispatchers.IO) {
                                 val bitmap: Bitmap = Glide.with(this@MainActivity)
@@ -324,6 +331,31 @@ class MainActivity : AppCompatActivity() {
 
 
 
+=======
+
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            response.body()!!.forEach {
+                                val url = URL(it.image_url)
+                                val connection = url.openConnection()
+                                val inputStream = connection.getInputStream()
+                                val image:Bitmap = BitmapFactory.decodeStream(inputStream)
+                                Log.d("TEST","g$image")
+
+                                val styles1 = kakaoMap!!.labelManager!!
+                                    .addLabelStyles(LabelStyles.from(LabelStyle.from(image).setZoomLevel(16)))
+                                val options1: LabelOptions =
+                                    LabelOptions.from(LatLng.from(it.y, it.x))
+                                        .setStyles(styles1)
+
+                                val layer1 = kakaoMap!!.labelManager!!.layer
+                                val label1 = layer1!!.addLabel(options1)
+
+                                label1.tag = it.id
+                                label1.show()
+
+                                isFirst = false
+                            }
+>>>>>>> Stashed changes
                         }
                     }
 

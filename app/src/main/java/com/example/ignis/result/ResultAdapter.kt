@@ -1,6 +1,7 @@
 package com.example.ignis.result
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ignis.R
+import com.example.ignis.detail.DetailActivity
 import com.example.ignis.main.Feed
 
 class ResultAdapter(private val itemList: List<Feed>, private val context: Context) : RecyclerView.Adapter<ResultAdapter.ResultViewHolder>() {
@@ -31,6 +33,10 @@ class ResultAdapter(private val itemList: List<Feed>, private val context: Conte
             holder.name.text = user
             holder.date.text = createAt
             holder.like.text = "$count 개"
+        }
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context,DetailActivity::class.java)
+            context.startActivity(intent)
         }
     }
 
